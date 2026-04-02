@@ -9,7 +9,7 @@ if (!sessionId) {
   localStorage.setItem('swiper_session_id', sessionId);
 }
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = '';
 
 let currentQuestion = null;
 let topCard = null;

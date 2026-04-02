@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { initDB, dbPromise } = require('./database');
 const { getNextQuestion, submitSwipe, getLeaderboard } = require('./queries');
 
@@ -8,6 +9,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Securely serve the frontend root folder WITHOUT serving the backend folder
+app.use('/backend', (req, res) => res.status(403).send('Forbidden'));
+app.use(express.static(path.join(__dirname, '../')));
 
 app.get('/next-question', async (req, res) => {
   try {
