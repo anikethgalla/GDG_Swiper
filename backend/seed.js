@@ -31,13 +31,13 @@ async function seed() {
 
   // You can fill in the actual names, roles, and filenames for all 7 people here!
   const myRealSeniors = [
-    { name: "Sarah", alias: "Role 1", image: "person1.png.JPG" },
-    { name: "Varsith", alias: "Role 2", image: "person2.png.JPG" },
-    { name: "Aditya", alias: "Role 3", image: "person3.png.JPG" },
-    { name: "Reenu", alias: "Role 4", image: "person4.png.JPG" },
-    { name: "Shashank", alias: "Role 5", image: "person5.png.JPG" },
-    { name: "Humaidh", alias: "Role 6", image: "person6.png.JPG" },
-    { name: "Akhyan", alias: "Role 7", image: "person7.png.JPG" }
+    { name: "Sarah", alias: "Core", image: "person1.png.JPG" },
+    { name: "Varsith", alias: "Core", image: "person2.png.JPG" },
+    { name: "Aditya", alias: "Core", image: "person3.png.JPG" },
+    { name: "Reenu", alias: "Core", image: "person4.png.JPG" },
+    { name: "Shashank", alias: "Senior Core", image: "person5.png.JPG" },
+    { name: "Humaidh", alias: "Senior Core", image: "person6.png.JPG" },
+    { name: "Akhyan", alias: "Senior Core", image: "person7.png.JPG" }
   ];
 
   for (const person of myRealSeniors) {

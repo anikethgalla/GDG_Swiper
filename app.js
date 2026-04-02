@@ -9,7 +9,14 @@ if (!sessionId) {
   localStorage.setItem('swiper_session_id', sessionId);
 }
 
-const API_BASE = '';
+let API_BASE = '';
+// Automatically detect if you are running via Live Server (port 5500) vs Node (port 3000)
+// If it detects Live Server, it will correctly route background traffic to your node server!
+if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+  if (window.location.port !== '3000') {
+    API_BASE = 'http://localhost:3000';
+  }
+}
 
 let currentQuestion = null;
 let topCard = null;
@@ -141,7 +148,7 @@ function renderCard(questionData) {
   const imgSrc = `./images/${questionData.caricature_id}`;
 
   card.innerHTML = `
-    <img src="${imgSrc}" alt="${questionData.name}" draggable="false" style="background: rgba(255,255,255,0.05); padding:20px; object-fit: contain;" />
+    <img src="${imgSrc}" alt="${questionData.name}" draggable="false" />
     <div class="card-info">
       <div class="card-header">
          <span class="card-name">${questionData.name}</span>
