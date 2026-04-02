@@ -42,8 +42,20 @@ app.post('/submit-swipe', async (req, res) => {
 
 app.get('/leaderboard', async (req, res) => {
   try {
-    const leaderboard = await getLeaderboard();
+    const traitId = req.query.trait_id || null;
+    const leaderboard = await getLeaderboard(traitId);
     res.json(leaderboard);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/traits', async (req, res) => {
+  try {
+    const db = await dbPromise;
+    const traits = await db.all('SELECT * FROM traits');
+    res.json(traits);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });

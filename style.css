@@ -68,6 +68,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.5px;
   background: linear-gradient(90deg, var(--accent-pink), var(--accent-cyan));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .top-nav .subtitle {
@@ -358,21 +359,32 @@ h1, h2, h3, h4, h5, h6 {
 .leaderboard-header h2 { font-size: 1.8rem; margin-bottom: 5px; }
 .lb-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 15px; }
 
-.lb-select {
-  width: 100%;
-  padding: 10px;
-  background: #1A1A1A;
-  color: white;
-  border: 1px solid var(--glass-border);
-  border-radius: 8px;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  outline: none;
-  cursor: pointer;
-  appearance: none;
+.traits-filter-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 0 20px 15px 20px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
-.lb-select option {
-  background: #1A1A1A;
+.traits-filter-container::-webkit-scrollbar {
+  display: none;
+}
+.trait-pill {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.trait-pill.active {
+  background: var(--accent-pink);
+  border-color: var(--accent-pink);
+  font-weight: 600;
   color: white;
 }
 

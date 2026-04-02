@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Senior Swipe</title>
+    <title>snitchswipe</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
+
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
+
 <body>
     <!-- App Container -->
     <div id="app">
         <!-- Header -->
-        <header class="top-nav">
-            <h1>Senior Swipe</h1>
-            <p class="subtitle">Trait Edition</p>
+        <header class="top-nav" style="position: relative;">
+            <h1>SnitchSwipe</h1>
+            <p class="subtitle">You Wish This Was Tinder:)</p>
+            <button onclick="resetSession()" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: var(--accent-cyan); z-index: 100;" title="Restart Swiping">↻</button>
         </header>
 
         <!-- Main Content Area -->
@@ -33,14 +38,14 @@
                 <div class="card-container" id="card-stack">
                     <!-- Cards injected via JS -->
                 </div>
-                
+
                 <div class="swipe-status">
                     <p id="cards-left-text"></p>
                 </div>
-                
+
                 <div class="action-buttons">
-                     <button class="action-btn x-btn" id="btn-no" title="No">❌</button>
-                     <button class="action-btn heart-btn" id="btn-yes" title="Yes">✅</button>
+                    <button class="action-btn x-btn" id="btn-no" title="No">❌</button>
+                    <button class="action-btn heart-btn" id="btn-yes" title="Yes">✅</button>
                 </div>
             </section>
 
@@ -50,6 +55,8 @@
                     <h2>You're all out!</h2>
                     <p>You've rated everyone.</p>
                     <button class="primary-btn" onclick="switchTab('leaderboard')">Check Leaderboard</button>
+                    <br><br>
+                    <button class="primary-btn" style="background: transparent; border: 2px solid var(--accent-pink);" onclick="resetSession()">Start Over ↻</button>
                 </div>
             </section>
 
@@ -57,8 +64,13 @@
             <section id="leaderboard-view" class="view hidden">
                 <div class="leaderboard-header">
                     <h2>Leaderboard 🏆</h2>
-                    <p class="lb-subtitle">Top 3 Overall Standing</p>
+                    <p class="lb-subtitle" id="lb-subtitle">Top 3 Overall Standing</p>
                 </div>
+                
+                <div class="traits-filter-container" id="traits-filter">
+                    <!-- Pills injected via JS -->
+                </div>
+
                 <div class="leaderboard-list" id="leaderboard-list">
                     <!-- Leaderboard items injected via JS -->
                 </div>
@@ -81,4 +93,5 @@
     <!-- Application Script -->
     <script src="app.js"></script>
 </body>
+
 </html>

@@ -1,15 +1,15 @@
 const { dbPromise, initDB } = require('./database');
 
 const traits = [
-  "will you go to this senior for fashion advice", // social
-  "will you go to this senior for pointers to pull baddies", // personality
-  "will you go to this senior for gossip/tea", // social
-  "will you go to this senior for tutoring", // academic
-  "will you go to this senior to bail you out of jail (metaphorically)", // personality
-  "will you go to this senior for partying", // social
-  "will you go to this senior for consolation after heartbreak", // personality
-  "will you go to this senior for deep conversations", // personality
-  "will you go to this senior to put one psych scene" // social
+  "will you go to this senior for fashion advice",
+  "will you go to this senior for pointers to pull baddies",
+  "will you go to this senior for gossip/tea",
+  "will you go to this senior for tutoring",
+  "will you go to this senior to bail you out of jail (metaphorically)",
+  "will you go to this senior for partying",
+  "will you go to this senior for consolation after heartbreak",
+  "will you go to this senior for deep conversations",
+  "will you go to this senior to put one psych scene"
 ];
 
 async function seed() {
@@ -27,11 +27,23 @@ async function seed() {
     await db.run('INSERT INTO traits (question_text) VALUES (?)', [text]);
   }
 
-  console.log('Seeding placeholder seniors...');
-  for (let i = 1; i <= 20; i++) {
+  console.log('Seeding real seniors...');
+
+  // You can fill in the actual names, roles, and filenames for all 7 people here!
+  const myRealSeniors = [
+    { name: "Sarah", alias: "Role 1", image: "person1.png.JPG" },
+    { name: "Varsith", alias: "Role 2", image: "person2.png.JPG" },
+    { name: "Aditya", alias: "Role 3", image: "person3.png.JPG" },
+    { name: "Reenu", alias: "Role 4", image: "person4.png.JPG" },
+    { name: "Shashank", alias: "Role 5", image: "person5.png.JPG" },
+    { name: "Humaidh", alias: "Role 6", image: "person6.png.JPG" },
+    { name: "Akhyan", alias: "Role 7", image: "person7.png.JPG" }
+  ];
+
+  for (const person of myRealSeniors) {
     await db.run(
       'INSERT INTO seniors (name, alias, caricature_id) VALUES (?, ?, ?)',
-      [`Senior ${i}`, `Alias ${i}`, `caricature_${i}`]
+      [person.name, person.alias, person.image]
     );
   }
 

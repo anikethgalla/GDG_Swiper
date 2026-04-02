@@ -81,11 +81,10 @@ async function submitSwipe(sessionId, seniorId, traitId, responseStr) {
   }
 }
 
-async function getLeaderboard() {
+async function getLeaderboard(traitId = null) {
   const db = await dbPromise;
 
-  // Score = total_yes - (0.5 * total_maybe)
-  const query = `
+  let query = `
     SELECT 
       s.id, s.name, s.alias, s.caricature_id,
       SUM(p.yes_count) as total_yes,
@@ -94,12 +93,21 @@ async function getLeaderboard() {
       (SUM(p.yes_count) - (0.5 * SUM(p.maybe_count))) as score
     FROM seniors s
     JOIN pair_stats p ON s.id = p.senior_id
+  `;
+  
+  let params = [];
+  if (traitId) {
+    query += ` WHERE p.trait_id = ? `;
+    params.push(traitId);
+  }
+
+  query += `
     GROUP BY s.id
     ORDER BY score DESC
     LIMIT 3
   `;
 
-  const rows = await db.all(query);
+  const rows = await db.all(query, params);
   
   // Assign crowns
   const crowns = ['gold', 'silver', 'bronze'];

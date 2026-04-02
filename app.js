@@ -14,6 +14,7 @@ const API_BASE = 'http://localhost:3000';
 let currentQuestion = null;
 let topCard = null;
 let topCardHammer = null;
+let currentLeaderboardTrait = null;
 
 // Audio Context for synthesized sounds
 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -136,8 +137,8 @@ function renderCard(questionData) {
   card.style.transform = `translateY(0px) scale(1)`;
   card.style.zIndex = 1;
   
-  // Build a generic fallback image since we don't have members.js
-  const imgSrc = `https://api.dicebear.com/9.x/micah/svg?seed=${questionData.alias}`;
+  // Load the image from the local folder based on caricature_id
+  const imgSrc = `./images/${questionData.caricature_id}`;
 
   card.innerHTML = `
     <img src="${imgSrc}" alt="${questionData.name}" draggable="false" style="background: rgba(255,255,255,0.05); padding:20px; object-fit: contain;" />
@@ -146,7 +147,6 @@ function renderCard(questionData) {
          <span class="card-name">${questionData.name}</span>
          <span class="card-year">${questionData.alias}</span>
       </div>
-      <div class="card-role">${questionData.caricature_id}</div>
       <p class="card-bio">Swipe right if yes, left if no!</p>
     </div>
     
@@ -249,6 +249,10 @@ function switchTab(tabId) {
   document.getElementById('end-view').classList.remove('active');
 
   if (tabId === 'leaderboard') {
+    const filters = document.getElementById('traits-filter');
+    if (filters && filters.children.length === 0) {
+      fetchAndRenderTraits();
+    }
     renderLeaderboard();
   } else if (tabId === 'swipe' && !currentQuestion) {
     fetchNextQuestion();
@@ -271,7 +275,11 @@ async function renderLeaderboard() {
   container.innerHTML = '<h3>Loading...</h3>';
   
   try {
-    const res = await fetch(`${API_BASE}/leaderboard`);
+    const url = currentLeaderboardTrait 
+        ? `${API_BASE}/leaderboard?trait_id=${currentLeaderboardTrait}`
+        : `${API_BASE}/leaderboard`;
+        
+    const res = await fetch(url);
     const scoredMembers = await res.json();
     
     container.innerHTML = '';
@@ -287,7 +295,7 @@ async function renderLeaderboard() {
       if (idx === 1) rankDisplay = '🥈';
       if (idx === 2) rankDisplay = '🥉';
       
-      const imgSrc = `https://api.dicebear.com/9.x/micah/svg?seed=${m.alias}`;
+      const imgSrc = `./images/${m.caricature_id}`;
 
       const div = document.createElement('div');
       div.className = `leaderboard-item ${rankClass}`;
@@ -298,7 +306,7 @@ async function renderLeaderboard() {
         <img src="${imgSrc}" class="avatar" draggable="false" style="background:#fff;" />
         <div class="lb-info">
           <div class="lb-name">${m.name}</div>
-          <div class="lb-role">${m.alias} - ${m.caricature_id}</div>
+          <div class="lb-role">${m.alias}</div>
         </div>
         <div class="lb-score">
            Score: ${m.score}
@@ -327,6 +335,43 @@ function triggerConfetti() {
 
     if (Date.now() < end) requestAnimationFrame(frame);
   }());
+}
+
+async function fetchAndRenderTraits() {
+  try {
+    const res = await fetch(`${API_BASE}/traits`);
+    const traits = await res.json();
+    
+    const container = document.getElementById('traits-filter');
+    container.innerHTML = `<div class="trait-pill active" onclick="filterLeaderboard(null, this)">Overall</div>`;
+    
+    traits.forEach(t => {
+      const pill = document.createElement('div');
+      pill.className = 'trait-pill';
+      pill.innerText = t.question_text.length > 25 ? t.question_text.substring(0, 25) + '...' : t.question_text;
+      pill.onclick = () => filterLeaderboard(t.id, pill);
+      container.appendChild(pill);
+    });
+  } catch (err) {
+    console.error("Traits fetch error:", err);
+  }
+}
+
+function filterLeaderboard(traitId, pillEl) {
+  document.querySelectorAll('.trait-pill').forEach(el => el.classList.remove('active'));
+  pillEl.classList.add('active');
+  
+  currentLeaderboardTrait = traitId;
+  const subtitle = traitId ? "Top 3 for Selected Trait" : "Top 3 Overall Standing";
+  const subtitleEl = document.getElementById('lb-subtitle');
+  if (subtitleEl) subtitleEl.innerText = subtitle;
+  
+  renderLeaderboard();
+}
+
+function resetSession() {
+  localStorage.removeItem('swiper_session_id');
+  window.location.reload();
 }
 
 window.onload = initApp;
